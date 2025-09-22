@@ -4,8 +4,6 @@ resource "aws_s3_bucket" "this" {
 
     tags = var.tags
 
-
-  
 }
 
 resource "aws_s3_bucket_versioning" "this" {
@@ -33,25 +31,25 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
             status = rule.value.status
 
-            dynamic "filter" {
+            # dynamic "filter" {
 
-                for_each = [rule.value.filter]
+            #     for_each = [rule.value.filter]
 
-                content {
+            #     content {
 
-                   and {
-                        prefix = filter.value.prefix
-                        tags = filter.value.tags 
-                        object_size_greater_than = filter.value.object_size_greater_than
-                        object_size_less_than = filter.value.object_size_less_than
-                   } 
-                }
+            #        and {
+            #             prefix = try(filter.value.prefix, null)
+            #             tags = try(filter.value.tags, null)
+            #        } 
+            #     }
               
-            }
+            # }
+
+            filter {}
 
             dynamic "transition" {
 
-                for_each = rule.value.transition
+                for_each = rule.value.transition 
 
                 content {
                     days = transition.value.days
@@ -64,11 +62,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
             dynamic "expiration" {
 
-                for_each = [rule.value.expiration]
+                for_each = rule.value.expiration != null ? [rule.value.expiration]: []
 
                 content {
-                    days = expiration.value.days
-                  
+                    expired_object_delete_marker = expiration.value.expired_object_delete_marker
                 }
               
             }
@@ -86,22 +83,23 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
           status = rule.value.status
 
-          dynamic "filter" {
+        #   dynamic "filter" {
 
-            for_each = [rule.value.filter]
+        #     for_each = [rule.value.filter]
 
-            content {
+        #     content {
 
-                and {
-                    prefix = filter.value.prefix
-                    tags = filter.value.tags 
-                    object_size_greater_than = filter.value.object_size_greater_than
-                    object_size_less_than = filter.value.object_size_less_than
-                }
+        #         and {
+        #             prefix = try(filter.value.prefix, null)
+        #             tags = try(filter.value.tags, null)
+                    
+        #         }
               
-            }
+        #     }
             
-          }
+        #   }
+        
+        filter {}
 
           dynamic "noncurrent_version_transition" {
 
@@ -115,7 +113,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
           }
 
           dynamic "noncurrent_version_expiration" {
-            for_each = [rule.value.non_current_expiration]
+
+            for_each = rule.value.non_current_expiration != null ? [rule.value.non_current_expiration]:  []
 
             content {
                 noncurrent_days = noncurrent_version_expiration.value.noncurrent_days

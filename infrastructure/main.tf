@@ -2,9 +2,39 @@ module "UmbrellaRawBucket" {
 
     source = "./modules/s3"
 
-    bucket_name = "umbrella-raw"
-  
+    bucket_name = var.raw_bucket_name
+
+    tags = var.raw_bucket_tags
+
+    transition_rules = var.raw_bucket_transition_rules 
+
+    non_current_transition_rule = var.raw_bucket_noncurrent_transition_rules
 }
+
+# module "UmbrellaProcessedBucket" {
+
+#     source = "./modules/s3"
+
+#     bucket_name = "umbrella-processed"
+
+#     tags = {
+#       Type = "processed"
+#     }
+# }
+
+
+# module "UmbrellaAnalyticsBucket" {
+
+#     source = "./modules/s3"
+
+#     bucket_name = "umbrella-analytics"
+
+#     tags = {
+#       Type = "processed"
+#     }
+# }
+
+
 
 
 module "extractor_iam_role" {
