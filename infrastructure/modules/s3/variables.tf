@@ -47,7 +47,7 @@ variable "transition_rules" {
 
 
     default = [ {
-      id = "ran-rule-234"
+      id = "current-transition-rule"
 
       status = "Enabled"
 
@@ -61,14 +61,71 @@ variable "transition_rules" {
       
       {
         days = 60
-        storage_class = "GLACIER"
+        storage_class = "GLACIER_IR"
       } ]
 
       expiration = {
-        days = 365
+        days = 120
       }
 
     } ]
   
 }
 
+
+
+variable "non_current_transition_rule" {
+
+  type = list(object({
+
+      id = string
+
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
+
+      non_current_transition = list(object({
+        noncurrent_days = number
+        storage_class = string 
+      }) )
+      non_current_expiration = object({
+        noncurrent_days = number 
+      })
+      status = string
+
+    }))
+
+    default = [ {
+      id = "noncurrent-transition-rule"
+
+      status = "Enabled"
+
+      filter = {
+        prefix = null
+        tags = null
+        object_size_greater_than = null
+        object_size_less_than = null
+      }
+        
+
+      non_current_transition = [ {
+        noncurrent_days = 30
+        storage_class = "GLACIER_IR"
+      },
+      
+      {
+        noncurrent_days = 120
+        storage_class = "GLACIER"
+      } ]
+
+      non_current_expiration = {
+        noncurrent_days = 180 
+      }
+
+    } ]
+
+  
+}

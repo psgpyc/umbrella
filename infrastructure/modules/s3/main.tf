@@ -19,7 +19,6 @@ resource "aws_s3_bucket_versioning" "this" {
 }
 
 
-
 resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
     bucket = aws_s3_bucket.this.id
@@ -78,11 +77,55 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
 
     }
 
+    dynamic "rule" {
 
+        for_each = var.non_current_transition_rule
 
+        content {
+          id = rule.value.id
 
-    
-  
+          status = rule.value.status
+
+          dynamic "filter" {
+
+            for_each = [rule.value.filter]
+
+            content {
+
+                and {
+                    prefix = filter.value.prefix
+                    tags = filter.value.tags 
+                    object_size_greater_than = filter.value.object_size_greater_than
+                    object_size_less_than = filter.value.object_size_less_than
+                }
+              
+            }
+            
+          }
+
+          dynamic "noncurrent_version_transition" {
+
+            for_each = rule.value.non_current_transition
+
+            content {
+              noncurrent_days = noncurrent_version_transition.value.noncurrent_days
+              storage_class = noncurrent_version_transition.value.storage_class
+            }
+            
+          }
+
+          dynamic "noncurrent_version_expiration" {
+            for_each = [rule.value.non_current_expiration]
+
+            content {
+                noncurrent_days = noncurrent_version_expiration.value.noncurrent_days
+              
+            }
+            
+          }
+        }
+      
+    }
 }
 
 
