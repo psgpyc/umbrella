@@ -99,7 +99,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
             
         #   }
         
-        filter {}
+        filter {} 
 
           dynamic "noncurrent_version_transition" {
 

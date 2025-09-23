@@ -11,28 +11,32 @@ module "UmbrellaRawBucket" {
     non_current_transition_rule = var.raw_bucket_noncurrent_transition_rules
 }
 
-# module "UmbrellaProcessedBucket" {
+module "UmbrellaProcessedBucket" {
 
-#     source = "./modules/s3"
+    source = "./modules/s3"
 
-#     bucket_name = "umbrella-processed"
+    bucket_name = var.processed_bucket_name
 
-#     tags = {
-#       Type = "processed"
-#     }
-# }
+    tags = var.processed_bucket_tags
 
+    transition_rules = var.processed_bucket_transition_rules
 
-# module "UmbrellaAnalyticsBucket" {
+    non_current_transition_rule = var.processed_bucket_noncurrent_transition_rules
 
-#     source = "./modules/s3"
+}
 
-#     bucket_name = "umbrella-analytics"
+module "UmbrellaAnalyticsBucket" {
 
-#     tags = {
-#       Type = "processed"
-#     }
-# }
+    source = "./modules/s3"
+
+    bucket_name = var.analytics_bucket_name
+
+    tags = var.analytics_bucket_tags
+
+    transition_rules = var.analytics_bucket_transition_rules
+
+    non_current_transition_rule = var.analytics_bucket_noncurrent_transition_rules
+}
 
 
 

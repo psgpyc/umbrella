@@ -27,12 +27,6 @@ variable "transition_rules" {
 
       id = string
 
-      filter = object({
-        prefix = optional(string)
-        tags = optional(map(string)) 
-        
-      })
-
       transition = list(object({
         days = number
         storage_class = string 
@@ -53,12 +47,6 @@ variable "non_current_transition_rule" {
   type = list(object({
 
       id = string
-
-      filter = object({
-        prefix = optional(string)
-        tags = optional(map(string)) 
-        
-      })
 
       non_current_transition = list(object({
         noncurrent_days = number
