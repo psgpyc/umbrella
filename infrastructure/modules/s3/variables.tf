@@ -27,12 +27,21 @@ variable "transition_rules" {
 
       id = string
 
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string))
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number) 
+      })
+
       transition = list(object({
         days = number
         storage_class = string 
       }) )
       
       expiration = optional(object({
+        date = optional(string)
+        days = optional(number)
         expired_object_delete_marker = optional(bool)
       }))
       status = string
@@ -47,6 +56,13 @@ variable "non_current_transition_rule" {
   type = list(object({
 
       id = string
+
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string))
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number) 
+      })
 
       non_current_transition = list(object({
         noncurrent_days = number

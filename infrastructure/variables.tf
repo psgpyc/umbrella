@@ -50,12 +50,12 @@ variable "raw_bucket_transition_rules" {
 
       id = string
 
-      # filter = object({
-      #   prefix = optional(string)
-      #   tags = optional(map(string)) 
-      #   object_size_greater_than = optional(number)
-      #   object_size_less_than = optional(number)
-      # })
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
 
       transition = list(object({
         days = number
@@ -63,6 +63,7 @@ variable "raw_bucket_transition_rules" {
       }) )
 
       expiration = optional(object({
+        date = optional(string)
         days = optional(number)
         expired_object_delete_marker = optional(bool) 
 
@@ -80,12 +81,12 @@ variable "processed_bucket_transition_rules" {
 
       id = string
 
-      # filter = object({
-      #   prefix = optional(string)
-      #   tags = optional(map(string)) 
-      #   object_size_greater_than = optional(number)
-      #   object_size_less_than = optional(number)
-      # })
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
 
       transition = list(object({
         days = number
@@ -93,6 +94,7 @@ variable "processed_bucket_transition_rules" {
       }) )
 
       expiration = optional(object({
+        date = optional(string)
         days = optional(number)
         expired_object_delete_marker = optional(bool) 
 
@@ -110,12 +112,12 @@ variable "analytics_bucket_transition_rules" {
 
       id = string
 
-      # filter = object({
-      #   prefix = optional(string)
-      #   tags = optional(map(string)) 
-      #   object_size_greater_than = optional(number)
-      #   object_size_less_than = optional(number)
-      # })
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
 
       transition = list(object({
         days = number
@@ -123,6 +125,7 @@ variable "analytics_bucket_transition_rules" {
       }) )
 
       expiration = optional(object({
+        date = optional(string)
         days = optional(number)
         expired_object_delete_marker = optional(bool) 
 
@@ -142,12 +145,12 @@ variable "raw_bucket_noncurrent_transition_rules" {
 
       id = string
 
-      # filter = object({
-      #   prefix = optional(string)
-      #   tags = optional(map(string)) 
-      #   object_size_greater_than = optional(number)
-      #   object_size_less_than = optional(number)
-      # })
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
 
       non_current_transition = list(object({
         noncurrent_days = number
@@ -168,12 +171,12 @@ variable "processed_bucket_noncurrent_transition_rules" {
 
       id = string
 
-      # filter = object({
-      #   prefix = optional(string)
-      #   tags = optional(map(string)) 
-      #   object_size_greater_than = optional(number)
-      #   object_size_less_than = optional(number)
-      # })
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
 
       non_current_transition = list(object({
         noncurrent_days = number
@@ -194,12 +197,12 @@ variable "analytics_bucket_noncurrent_transition_rules" {
 
       id = string
 
-      # filter = object({
-      #   prefix = optional(string)
-      #   tags = optional(map(string)) 
-      #   object_size_greater_than = optional(number)
-      #   object_size_less_than = optional(number)
-      # })
+      filter = object({
+        prefix = optional(string)
+        tags = optional(map(string)) 
+        object_size_greater_than = optional(number)
+        object_size_less_than = optional(number)
+      })
 
       non_current_transition = list(object({
         noncurrent_days = number
