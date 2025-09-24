@@ -65,3 +65,49 @@ module "extractor_iam_role" {
      
   
 }
+
+
+module "transformer_iam_role" {
+
+    source = "./modules/iam"
+
+    iam_role_name = "UmbrellaTransformerRole"
+
+    assume_role_policy = templatefile("./policies/assume_role_policy.json.tpl", {
+        assuming_resources = ["glue.amazonaws.com"]
+    })
+
+    tags = {
+      Type = "TransformerRole"
+    }
+
+    policy_name = "UmbrellaTransformerRoleAllowPutS3Policy"
+
+    policy = templatefile("./policies/transformer_iam_role_policy.json.tpl", {
+        raw_bucket_arn = module.UmbrellaRawBucket.bucket_arn
+        transformer_bucket_arn = module.UmbrellaProcessedBucket.bucket_arn
+    })
+  
+}
+
+
+
+module "analytics_iam_role" {
+    source = "./modules/iam"
+
+    iam_role_name = "UmbrellaAnalyticsRole"
+
+    assume_role_policy = templatefile("./policies/snowflake_assume_role_policy.json.tpl", {
+        snowflake_arn = "arn:aws:iam::897729116490:root"
+    })
+
+    tags = {
+      Type = "AnalyticsRole"
+    }
+
+    policy_name = "UmbrellaAnalyticsRolePolicy"
+
+    policy = templatefile("./policies/snowflake_iam_role.json.tpl", {
+        analytics_bucket_arn = module.UmbrellaAnalyticsBucket.bucket_arn
+    })
+}
