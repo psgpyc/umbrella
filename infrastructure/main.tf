@@ -139,3 +139,16 @@ module "sns_topic_snowflake" {
 }
 
 
+resource "aws_s3_bucket_notification" "this" {
+
+    bucket = module.UmbrellaProcessedBucket.bucket_id
+
+    topic {
+      topic_arn = module.sns_topic_snowflake.topic_arn
+
+      events = ["s3:ObjectCreated:*"]
+    }
+
+    depends_on = [ module.UmbrellaProcessedBucket, module.sns_topic_snowflake ]
+  
+}
