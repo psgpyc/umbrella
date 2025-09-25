@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 module "UmbrellaRawBucket" {
 
     source = "./modules/s3"
@@ -111,3 +114,28 @@ module "analytics_iam_role" {
         analytics_bucket_arn = module.UmbrellaAnalyticsBucket.bucket_arn
     })
 }
+
+
+
+module "sns_topic_snowflake" {
+    source = "./modules/sns"
+
+    sns_topic_name = "snowflakeSnowPipeTopic"
+
+    sns_topic_delivery_policy = file("./policies/sns_delivery_policy.json")
+
+    sns_topic_resource_access_policy = templatefile("./policies/sns_resource_policy.json.tpl", {
+        service = "s3.amazonaws.com"
+        current_region = data.aws_region.current.id
+        source_account_id = data.aws_caller_identity.current.account_id
+        topic_name = "snowflakeSnowPipeTopic"
+
+    })
+
+    sns_tags = {
+        "Type":  "snowflake"
+    }
+  
+}
+
+

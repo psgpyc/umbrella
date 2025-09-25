@@ -3,7 +3,7 @@
     "Statement":  [{
         "Effect": "Allow",
         "Principal":  {
-            "AWS": "${snowflake_arn}"
+            "AWS": ${jsonencode(snowflake_arn)}
         },
         "Action": "sts:AssumeRole"
     }]
