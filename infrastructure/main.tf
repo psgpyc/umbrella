@@ -153,6 +153,27 @@ resource "aws_s3_bucket_notification" "this" {
   
 }
 
+module "sqs_topic_snowflake" {
+
+    source = "./modules/sqs"
+
+    sqs_queue_name = "read_from_sns_s3_update"
+
+    sqs_resource_policy = templatefile("./policies/sqs_resource_policy.json.tpl", {
+        Region = data.aws_region.current.id
+        AccountId = data.aws_caller_identity.current.account_id
+        QueueName = "read_from_sns_s3_update"
+        SourceSNSArn = module.sns_topic_snowflake.topic_arn
+    })
+  
+}
 
 
 
+
+resource "aws_sns_topic_subscription" "this" {
+    topic_arn = module.sns_topic_snowflake.topic_arn
+    protocol = "sqs"
+    endpoint = module.sqs_topic_snowflake.sqs_arn
+  
+}
