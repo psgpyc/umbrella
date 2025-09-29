@@ -152,3 +152,7 @@ resource "aws_s3_bucket_notification" "this" {
     depends_on = [ module.UmbrellaProcessedBucket, module.sns_topic_snowflake ]
   
 }
+
+
+
+

@@ -12,4 +12,4 @@
             "arn:aws:sns:${current_region}:${source_account_id}:${topic_name}"
         ]
     }]
-}
+}           
