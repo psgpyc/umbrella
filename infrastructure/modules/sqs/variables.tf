@@ -49,8 +49,16 @@ variable "tags" {
 # resource policy
 
 variable "sqs_resource_policy" {
-    
+
     type = string
+    default = null
     description = "Resource access policy for SQS"
+  
+}
+
+variable "redrive_policy" {
+
+    type = string
+    default = null
   
 }

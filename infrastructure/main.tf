@@ -153,7 +153,15 @@ resource "aws_s3_bucket_notification" "this" {
   
 }
 
-module "sqs_topic_snowflake" {
+module "sqs_dlq_snowflake" {
+
+    source = "./modules/sqs"
+
+    sqs_queue_name = "dlq_snowflake"
+  
+}
+
+module "sqs_snowflake" {
 
     source = "./modules/sqs"
 
@@ -165,15 +173,20 @@ module "sqs_topic_snowflake" {
         QueueName = "read_from_sns_s3_update"
         SourceSNSArn = module.sns_topic_snowflake.topic_arn
     })
+
+    redrive_policy = jsonencode({
+            deadLetterTargetArn = module.sqs_dlq_snowflake.sqs_arn
+            maxReceiveCount     = 5
+    })
+
+    depends_on = [ module.sqs_dlq_snowflake ]
   
 }
-
-
 
 
 resource "aws_sns_topic_subscription" "this" {
     topic_arn = module.sns_topic_snowflake.topic_arn
     protocol = "sqs"
-    endpoint = module.sqs_topic_snowflake.sqs_arn
+    endpoint = module.sqs_snowflake.sqs_arn
   
 }
