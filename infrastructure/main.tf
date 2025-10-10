@@ -188,5 +188,10 @@ resource "aws_sns_topic_subscription" "this" {
     topic_arn = module.sns_topic_snowflake.topic_arn
     protocol = "sqs"
     endpoint = module.sqs_snowflake.sqs_arn
+
+    filter_policy = jsonencode({
+        fileType = ["json"]
+        prefix   = [{ prefix = "orders/" }]
+  })
   
 }
