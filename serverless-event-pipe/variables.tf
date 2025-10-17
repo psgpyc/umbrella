@@ -159,3 +159,52 @@ variable "stage_name" {
     type = string
   
 }
+
+
+# sqs
+
+variable "sqs_queue_name" {
+    type = string
+  
+}
+
+variable "sqs_dlq_name" {
+  type = string
+  
+}
+
+variable "delay_seconds" {
+
+    type = number
+    default = 90
+  
+}
+
+variable "max_message_size" {
+
+    type = number
+    default = 2048
+  
+}
+
+variable "message_retention_seconds" {
+
+    type = number
+    default = 86400
+  
+}
+
+variable "receive_wait_time_seconds" {
+
+    type = number
+    default = 10
+  
+}
+
+variable "sqs_resource_access_policy" {
+
+    type = string
+    default = null
+  
+}
+

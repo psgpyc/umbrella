@@ -48,6 +48,43 @@ module "iam" {
 
 }
 
+module "sqs_dlq" {
+
+    source = "./modules/sqs"
+
+    sqs_queue_name = var.sqs_dlq_name
+
+    tags = {
+      Type = "dlq"
+    }
+
+}
+
+module "sqs" {
+
+    source = "./modules/sqs"
+
+    sqs_queue_name = var.sqs_queue_name
+
+    delay_seconds = var.delay_seconds
+    receive_wait_time_seconds = var.receive_wait_time_seconds
+    message_retention_seconds = var.message_retention_seconds
+
+    sqs_resource_access_policy = templatefile("./policies/sqs_resource_access_policy.json.tpl", {
+        region = data.aws_region.current.id
+        account_id = data.aws_caller_identity.current.account_id
+        queue_name = var.sqs_queue_name
+    })
+
+    # redrive_policy = templatefile("./policies/sqs_redrive_policy.json.tpl", {
+    #     queue_arn = module.sqs_dlq.queue_arn
+    #     max_receive_count     = 4
+    # })
+
+   
+
+    depends_on = [ module.sqs_dlq ]
+}
 
 module "lambda" {
 
