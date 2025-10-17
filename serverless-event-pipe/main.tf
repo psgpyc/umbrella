@@ -76,10 +76,10 @@ module "sqs" {
         queue_name = var.sqs_queue_name
     })
 
-    # redrive_policy = templatefile("./policies/sqs_redrive_policy.json.tpl", {
-    #     queue_arn = module.sqs_dlq.queue_arn
-    #     max_receive_count     = 4
-    # })
+    redrive_policy = templatefile("./policies/sqs_redrive_policy.json.tpl", {
+        queue_arn = module.sqs_dlq.queue_arn
+        max_receive_count     = 4
+    })
 
    
 
